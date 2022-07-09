@@ -1,16 +1,19 @@
 #![allow(dead_code, unused_imports)]
+
+use std::ops::ControlFlow;
+
 pub fn sum_u32_numbers(numbers: &[u32]) -> Option<u32> {
-    let sum = numbers
+    match numbers
         .iter() // as iterator
-        .fold((0, false), |left: (u32, bool), right: &u32| { // use fold to sum numbers, return (sum, is_overflowing)
-            left.0.overflowing_add(*right)
-        });
-    
-    // when overflowing, return None, otherwise return Some(sum)    
-    if sum.1 {
-        return None;
-    } else {
-        return Some(sum.0);
+        .try_fold(0_u32, |prev, num| {
+            if let Some(next) = prev.checked_add(*num) {
+                ControlFlow::Continue(next)
+            } else {
+                ControlFlow::Break(prev)
+            }
+        }) {
+        ControlFlow::Continue(sum) => Some(sum),
+        ControlFlow::Break(_) => None,
     }
 }
 
