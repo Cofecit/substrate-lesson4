@@ -6,7 +6,7 @@ pub trait Graphic {
     fn area(&self) -> f64;
 }
 
-// Circle with center point and radius
+// Circle in Polar coordinates with center point and radius
 pub struct Circle((u32, u32), f64);
 
 // Graphic implementation of Circle
@@ -17,7 +17,7 @@ impl Graphic for Circle {
     }
 }
 
-// Triangle with three point
+// Triangle in Polar coordinates with three point
 pub struct Triangle((u32, u32), (u32, u32), (u32, u32));
 
 // Graphic implementation of Triangle
@@ -38,8 +38,8 @@ pub struct Rectangle((u32, u32), (u32, u32));
 // Graphic implementation of Rectangle
 impl Graphic for Rectangle {
     fn area(&self) -> f64 {
-        // area = (x2 - x1) * (y2 - y1)
-        return ((self.1 .0 - self.0 .0) * (self.1 .1 - self.0 .1)) as f64;
+        // area = abs((x2 - x1) * (y2 - y1))
+        return (((self.1 .0 - self.0 .0) * (self.1 .1 - self.0 .1)) as f64).abs();
     }
 }
 
